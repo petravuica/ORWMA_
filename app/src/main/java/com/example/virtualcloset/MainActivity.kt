@@ -18,8 +18,12 @@ import com.example.virtualcloset.ui.screens.UserInputScreen
 import com.example.virtualcloset.ui.screens.VirtualClosetNavigationGraph
 import com.example.virtualcloset.ui.screens.WelcomeScreen
 import com.example.virtualcloset.ui.theme.VirtualClosetTheme
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.firestore
 
 class MainActivity : ComponentActivity() {
+    private val db = Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

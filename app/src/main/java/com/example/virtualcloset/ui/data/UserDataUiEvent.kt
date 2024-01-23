@@ -1,6 +1,11 @@
 package com.example.virtualcloset.ui.data
 
-sealed class UserDataUiEvent{
-    data class UserNameEntered(val name:String) : UserDataUiEvent()
+import java.net.URL
+
+sealed class UserDataUiEvents{
+
+    data class imageSelected(val imageURL: String) : UserDataUiEvents()
+    data class typeSelected(val type: String) : UserDataUiEvents()
+    data class notesEntered(val notes : String) : UserDataUiEvents()
 
 }

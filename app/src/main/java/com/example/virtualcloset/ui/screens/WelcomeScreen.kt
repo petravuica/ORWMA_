@@ -30,18 +30,17 @@ fun WelcomeScreen(
         modifier = Modifier.fillMaxSize().clickable {
             navController.navigate(Routes.USER_INPUT_SCREEN)
         },
-        color = colorResource(id = R.color.purple_200)
+        color = colorResource(id = R.color.purple)
     ){
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxWidth().height(500.dp)
                 .wrapContentHeight(align = Alignment.CenterVertically),
             fontSize = 50.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.SemiBold,
             fontStyle = FontStyle.Italic,
-            text = "Welcome to Virtual Closet"
+            text = "Welcome to \n \n Virtual Closet"
         )
     }
 }

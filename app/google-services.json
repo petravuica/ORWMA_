@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "605590018154",
+    "project_id": "virtualcloset-vuica",
+    "storage_bucket": "virtualcloset-vuica.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605590018154:android:680e55802b64f1c14fd213",
+        "android_client_info": {
+          "package_name": "com.example.virtualcloset"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhjGmcR3yGaEx03_whDGBLQmDjE9xNZmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -48,10 +48,15 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
@@ -60,16 +65,23 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.DpOffset
+import androidx.core.net.toUri
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import com.example.virtualcloset.ui.data.DropDownItem
 
 import org.w3c.dom.Text
@@ -119,7 +131,7 @@ fun TopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorResource(id = R.color.purple_200))
+            .background(colorResource(id = R.color.purple))
             .horizontalScroll(scrollState)
         
     ){
@@ -130,7 +142,7 @@ fun TopBar(
             elevation = ButtonDefaults.buttonElevation(
                 defaultElevation = 10.dp
             ),
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(Routes.ADD_CLOTHES_SCREEN) },
 
         ) {
             TextComponent(textValue = "ADD", textSize = 18.sp)
@@ -154,7 +166,7 @@ fun TopBar(
             elevation = ButtonDefaults.buttonElevation(
                 defaultElevation = 10.dp
             ),
-            onClick = { /*TODO*/ }) {
+            onClick = { navController.navigate(Routes.JEANS) }) {
             TextComponent(textValue = "JEANS", textSize = 18.sp)
         }
         Button(
@@ -164,7 +176,7 @@ fun TopBar(
             elevation = ButtonDefaults.buttonElevation(
                 defaultElevation = 10.dp
             ),
-            onClick = { /*TODO*/ }) {
+            onClick = { navController.navigate(Routes.SHOES) }) {
             TextComponent(textValue = "SHOES", textSize = 18.sp)
         }
 
@@ -190,7 +202,8 @@ fun TextFieldComponent(
         placeholder = {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Notes", fontSize = 18.sp, textAlign = TextAlign.Center)
+                text = "Notes", fontSize = 18.sp, textAlign = TextAlign.Center
+            )
         },
         textStyle = TextStyle.Default.copy(fontSize = 24.sp),
         keyboardOptions = KeyboardOptions(
@@ -262,6 +275,110 @@ fun ChooseType(
                        isContextMenuVisible = false
                    })
             }
+        }
+    }
+}
+
+
+@Composable
+fun ClothesItem(clothesItem : ClothingItem) {
+    Card(
+        modifier = Modifier.padding(end = 8.dp),
+        shape = RoundedCornerShape(4.dp),
+
+    ) {
+        Column(
+            modifier = Modifier
+                .width(90.dp)
+                .height(100.dp)
+                .background(color = Color.LightGray)
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .height(70.dp)
+                    .padding(4.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(color = Color.White),
+                model = clothesItem.imageUrl,
+                contentDescription = null)
+            Text(text = clothesItem.notes, textAlign = TextAlign.Center)
+        }
+    }
+}
+@Preview
+@Composable
+fun ClothesItemPreview() {
+
+}
+@Composable
+fun ClothingListScreen(clothingViewModel: ClothingViewModel) {
+    val clothes = clothingViewModel.clothes
+
+    LazyColumn {
+        items(clothes) { clothingItem ->
+            // Prikaz pojedinačnog odjevnog predmeta
+            ClothingItemComponent(clothingItem)
+            Spacer(modifier = Modifier.size(16.dp))
+        }
+    }
+}
+
+
+@Composable
+fun ClothingItemComponent(clothingItem: ClothingItem) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp)
+            .padding(16.dp),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Prikaz slike
+            if (clothingItem.imageUrl.isNotEmpty()) {
+                val uri = Uri.parse(clothingItem.imageUrl)
+                AsyncImage(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .padding(4.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(color = Color.White),
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(uri)
+                        .crossfade(true)
+                        .build(),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null
+                )
+            } else {
+                // Prikaz placeholdera ili drugog prikaza ako nema slike
+                Text(
+                    text = "No Image",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .height(200.dp)
+                        .padding(4.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(color = Color.Gray)
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(8.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.size(8.dp))
+
+            // Prikaz bilješki
+            Text(
+                text = "Notes: ${clothingItem.notes}",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 8.dp).fillMaxWidth()
+            )
         }
     }
 }

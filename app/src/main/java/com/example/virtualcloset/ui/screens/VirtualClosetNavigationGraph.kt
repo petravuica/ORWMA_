@@ -8,7 +8,8 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun VirtualClosetNavigationGraph(
-    userInputViewModel: UserInputViewModel = viewModel()
+    userInputViewModel: UserInputViewModel = viewModel(),
+    clothingViewModel: ClothingViewModel = viewModel()
 ) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Routes.WELCOME_SCREEN){
@@ -22,7 +23,13 @@ fun VirtualClosetNavigationGraph(
             AddClothesScreen(UserInputViewModel())
         }
         composable(Routes.T_SHIRT){
-            Tshirt(navController)
+            Tshirt(navController, clothingViewModel)
+        }
+        composable(Routes.JEANS){
+            Jeans(navController, clothingViewModel)
+        }
+        composable(Routes.SHOES){
+            Shoes(navController, clothingViewModel)
         }
 
 

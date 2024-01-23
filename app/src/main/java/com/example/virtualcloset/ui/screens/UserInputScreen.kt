@@ -49,7 +49,7 @@ fun UserInputScreen(
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = colorResource(id = R.color.purple_200)
+        color = colorResource(id = R.color.purple)
     ){
         Column(
             modifier = Modifier
